@@ -1,6 +1,6 @@
 <script>
-  const CACHE_KEY = "gold_price_cache";
-  const CACHE_TIME = 10 * 60 * 1000; // 10 minutes
+  const CACHE_KEY = "gold_price_cache_v2"; // version add kiya taaki purana cache na use ho
+  const CACHE_TIME = 10 * 60 * 1000; // 10 min
 
   const refreshBtn = document.getElementById("refreshBtn");
   let isLoading = false;
@@ -14,8 +14,11 @@
     refreshBtn.disabled = true;
     refreshBtn.innerText = "Refreshing...";
 
+    // Show loading in table too
+    document.querySelectorAll("[id^='g']").forEach(el => el.innerText = "Loading...");
+
     try {
-      // 🔹 Cache check
+      // Cache check
       const cached = localStorage.getItem(CACHE_KEY);
       if (cached && !force) {
         const parsed = JSON.parse(cached);
@@ -25,14 +28,17 @@
         }
       }
 
-      // 🔹 FREE gold-api.com endpoint
-      const res = await fetch("https://gold-api.com/api/XAU/USD");
+      // API call
+      const res = await fetch("https://www.goldapi.io/api/XAU/USD", {
+        headers: { "x-access-token": "goldapi-h1s19mkylgyry-io" } // ← apna key yahan daal
+      });
 
-      if (!res.ok) throw new Error("API unavailable");
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
 
       const data = await res.json();
       if (!data.price || isNaN(data.price)) throw new Error("Invalid price");
 
+      // Save cache
       localStorage.setItem(
         CACHE_KEY,
         JSON.stringify({ price: data.price, time: Date.now() })
@@ -41,8 +47,17 @@
       applyPrice(data.price, "");
 
     } catch (err) {
-      errorEl.innerText = "Error: Free gold server busy. Try later.";
-      document.getElementById("ounceUSD").innerText = "Error";
+      console.error(err);
+      errorEl.innerText = "Error loading fresh price. Showing cached data if available.";
+
+      // Fallback to cache even if expired
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        applyPrice(parsed.price, "(old cached data)");
+      } else {
+        document.getElementById("ounceUSD").innerText = "Gold per Ounce (USD): Error";
+      }
     } finally {
       isLoading = false;
       refreshBtn.disabled = false;
@@ -51,7 +66,7 @@
   }
 
   function applyPrice(ounceUSD, note) {
-    document.getElementById("ounceUSD").innerText =
+    document.getElementById("ounceUSD").innerText = 
       `Gold per Ounce (USD): ${ounceUSD.toFixed(2)} ${note}`;
 
     const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
@@ -72,7 +87,7 @@
       dateStyle: "medium",
       timeStyle: "short"
     });
-    document.getElementById("time").innerText =
+    document.getElementById("time").innerText = 
       `Last updated: ${muscatTime} (Muscat Time)`;
   }
 
