@@ -70,7 +70,7 @@
   <p id="error"></p>
 
   <script>
-    const CACHE_KEY = "gold_price_cache_metalslive";
+    const CACHE_KEY = "gold_price_cache_metalprice";
     const CACHE_TIME = 10 * 60 * 1000; // 10 minutes
 
     const refreshBtn = document.getElementById("refreshBtn");
@@ -97,13 +97,12 @@
           }
         }
 
-        // Free keyless API - metals.live
-        const res = await fetch("https://api.metals.live/v1/spot");
+        // Free keyless API - metalpriceapi.com
+        const res = await fetch("https://api.metalpriceapi.com/v1/latest?base=USD&currencies=XAU");
         if (!res.ok) throw new Error("API unavailable");
 
         const data = await res.json();
-        // metals.live response mein gold price XAUUSD ke andar hota hai
-        const ounceUSD = data[0]?.gold || data.gold || 0;
+        const ounceUSD = data.rates?.XAU || 0;
         if (!ounceUSD || isNaN(ounceUSD)) throw new Error("Invalid price");
 
         localStorage.setItem(CACHE_KEY, JSON.stringify({ price: ounceUSD, time: Date.now() }));
