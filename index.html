@@ -1,96 +1,161 @@
-<script>
-  const CACHE_KEY = "gold_price_cache_v2"; // version add kiya taaki purana cache na use ho
-  const CACHE_TIME = 10 * 60 * 1000; // 10 min
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Gold Rates - SATTARDINA JEWELLERY</title>
+  <style>
+    body { margin: 0; padding: 10px; background: #000833; color: #fff; font-family: Arial, sans-serif; text-align: center; min-height: 100vh; }
+    .logo-container { margin: 15px 0 10px; }
+    .logo-img { width: clamp(100px, 32vw, 120px); height: clamp(100px, 32vw, 120px); border-radius: 50%; border: 3px solid #ffd700; box-shadow: 0 5px 12px rgba(255,215,0,0.3); object-fit: contain; background: #000833; }
+    h1 { color: #00d4ff; font-size: clamp(1.7em, 5.5vw, 2.1em); margin: 8px 0 4px; }
+    .arabic { font-size: clamp(1.7em, 4.8vw, 2.2em); color: #ffd700; margin: 4px 0; font-weight: bold; }
+    #ounceUSD { font-size: clamp(1.3em, 4.8vw, 1.5em); color: #00ff7f; margin: 18px 0 12px; font-weight: bold; }
+    table { width: 90%; max-width: 400px; margin: 0 auto 18px; border-collapse: collapse; background: #001a3a; border: 2px solid #00d4ff; border-radius: 8px; overflow: hidden; font-size: clamp(0.9em, 3.3vw, 1.05em); }
+    th, td { padding: 9px; border: 1px solid #004080; text-align: center; }
+    th { background: #000d24; color: #00d4ff; }
+    .karat { color: #ffd700; font-weight: bold; }
+    .refresh-btn { background: #00d4ff; color: #000; font-size: clamp(1.1em, 4.5vw, 1.4em); font-weight: bold; padding: 10px; margin: 25px auto 25px; border: none; border-radius: 10px; width: 90%; max-width: 360px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,212,255,0.5); }
+    .refresh-btn:hover { background: #00aaff; }
+    .refresh-btn:disabled { background: #555; cursor: not-allowed; }
+    .updated, #error { font-size: clamp(0.85em, 2.8vw, 0.95em); margin: 8px 0; }
+    .updated { color: #ccc; }
+    #error { color: #ffcc00; font-weight: bold; }
 
-  const refreshBtn = document.getElementById("refreshBtn");
-  let isLoading = false;
-
-  async function loadGoldPrice(force = false) {
-    const errorEl = document.getElementById("error");
-    errorEl.innerText = "";
-
-    if (isLoading) return;
-    isLoading = true;
-    refreshBtn.disabled = true;
-    refreshBtn.innerText = "Refreshing...";
-
-    // Show loading in table too
-    document.querySelectorAll("[id^='g']").forEach(el => el.innerText = "Loading...");
-
-    try {
-      // Cache check
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached && !force) {
-        const parsed = JSON.parse(cached);
-        if (Date.now() - parsed.time < CACHE_TIME) {
-          applyPrice(parsed.price, "(cached)");
-          return;
-        }
-      }
-
-      // API call
-      const res = await fetch("https://www.goldapi.io/api/XAU/USD", {
-        headers: { "x-access-token": "goldapi-h1s19mkylgyry-io" } // ← apna key yahan daal
-      });
-
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
-
-      const data = await res.json();
-      if (!data.price || isNaN(data.price)) throw new Error("Invalid price");
-
-      // Save cache
-      localStorage.setItem(
-        CACHE_KEY,
-        JSON.stringify({ price: data.price, time: Date.now() })
-      );
-
-      applyPrice(data.price, "");
-
-    } catch (err) {
-      console.error(err);
-      errorEl.innerText = "Error loading fresh price. Showing cached data if available.";
-
-      // Fallback to cache even if expired
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        applyPrice(parsed.price, "(old cached data)");
-      } else {
-        document.getElementById("ounceUSD").innerText = "Gold per Ounce (USD): Error";
-      }
-    } finally {
-      isLoading = false;
-      refreshBtn.disabled = false;
-      refreshBtn.innerText = "Refresh Rates";
+    @media (max-width: 600px) {
+      body { padding: 6px; }
+      .logo-img { width: clamp(95px, 30vw, 110px); height: clamp(95px, 30vw, 110px); }
+      table { width: 100%; font-size: 0.9em; }
+      th, td { padding: 7px; }
     }
-  }
+  </style>
+</head>
+<body>
 
-  function applyPrice(ounceUSD, note) {
-    document.getElementById("ounceUSD").innerText = 
-      `Gold per Ounce (USD): ${ounceUSD.toFixed(2)} ${note}`;
+  <div class="logo-container">
+    <img src="https://i.ibb.co/5gYgR4zc/Screenshot-20260129-035831-Instagram.jpg" alt="Sattardina Jewellery Logo" class="logo-img">
+  </div>
 
-    const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
-    const gold22gm = gold24gm * 0.921;
-    const gold21gm = gold24gm * 0.880;
-    const gold18gm = gold24gm * 0.755;
-    const tola21 = gold21gm * 11.664;
+  <h1>SATTARDINA JEWELLERY</h1>
+  <div class="arabic">مجوهرات ستاردينا</div>
 
-    document.getElementById("g24").innerText = gold24gm.toFixed(3);
-    document.getElementById("g22").innerText = gold22gm.toFixed(3);
-    document.getElementById("g21gm").innerText = gold21gm.toFixed(3);
-    document.getElementById("g18").innerText = gold18gm.toFixed(3);
-    document.getElementById("tola21").innerText = tola21.toFixed(2);
+  <div id="ounceUSD">Gold per Ounce (USD): Loading...</div>
 
-    const now = new Date();
-    const muscatTime = now.toLocaleString("en-US", {
-      timeZone: "Asia/Muscat",
-      dateStyle: "medium",
-      timeStyle: "short"
-    });
-    document.getElementById("time").innerText = 
-      `Last updated: ${muscatTime} (Muscat Time)`;
-  }
+  <table>
+    <tr>
+      <th>عيار / Aiyar</th>
+      <th>وحدة / Unit</th>
+      <th>سعر ر.ع / Price OMR</th>
+    </tr>
+    <tr><td class="karat">24K</td><td>1 gm / جرام</td><td id="g24">Loading...</td></tr>
+    <tr><td class="karat">22K</td><td>1 gm / جرام</td><td id="g22">Loading...</td></tr>
+    <tr><td class="karat">21K</td><td>1 gm / جرام</td><td id="g21gm">Loading...</td></tr>
+    <tr><td class="karat">18K</td><td>1 gm / جرام</td><td id="g18">Loading...</td></tr>
+    <tr><td class="karat">21K</td><td>1 Tola / تولة (11.664 gm)</td><td id="tola21">Loading...</td></tr>
+  </table>
 
-  window.addEventListener("load", () => loadGoldPrice());
-  refreshBtn.addEventListener("click", () => loadGoldPrice(true));
-</script>
+  <div class="social">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+    @sattardina_jewellery
+  </div>
+
+  <div class="whatsapp-container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    WHATSAPP: 95449739
+  </div>
+
+  <button class="refresh-btn" id="refreshBtn">Refresh Rates</button>
+
+  <p class="updated" id="time">Last updated: Loading... (Muscat Time)</p>
+  <p id="error"></p>
+
+  <script>
+    const CACHE_KEY = "gold_price_cache_metalslive";
+    const CACHE_TIME = 10 * 60 * 1000; // 10 minutes
+
+    const refreshBtn = document.getElementById("refreshBtn");
+    let isLoading = false;
+
+    async function loadGoldPrice(force = false) {
+      const errorEl = document.getElementById("error");
+      errorEl.innerText = "";
+
+      if (isLoading) return;
+      isLoading = true;
+      refreshBtn.disabled = true;
+      refreshBtn.innerText = "Refreshing...";
+
+      document.querySelectorAll("[id^='g']").forEach(el => el.innerText = "Loading...");
+
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached && !force) {
+          const parsed = JSON.parse(cached);
+          if (Date.now() - parsed.time < CACHE_TIME) {
+            applyPrice(parsed.price, "(cached)");
+            return;
+          }
+        }
+
+        // Free keyless API - metals.live
+        const res = await fetch("https://api.metals.live/v1/spot");
+        if (!res.ok) throw new Error("API unavailable");
+
+        const data = await res.json();
+        // metals.live response mein gold price XAUUSD ke andar hota hai
+        const ounceUSD = data[0]?.gold || data.gold || 0;
+        if (!ounceUSD || isNaN(ounceUSD)) throw new Error("Invalid price");
+
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ price: ounceUSD, time: Date.now() }));
+
+        applyPrice(ounceUSD, "");
+
+      } catch (err) {
+        console.error(err);
+        errorEl.innerText = "Error loading fresh price. Using cached if available.";
+
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          applyPrice(parsed.price, "(old cached)");
+        } else {
+          document.getElementById("ounceUSD").innerText = "Gold per Ounce (USD): Error";
+        }
+      } finally {
+        isLoading = false;
+        refreshBtn.disabled = false;
+        refreshBtn.innerText = "Refresh Rates";
+      }
+    }
+
+    function applyPrice(ounceUSD, note) {
+      document.getElementById("ounceUSD").innerText = 
+        `Gold per Ounce (USD): ${ounceUSD.toFixed(2)} ${note}`;
+
+      const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
+      const gold22gm = gold24gm * 0.921;
+      const gold21gm = gold24gm * 0.880;
+      const gold18gm = gold24gm * 0.755;
+      const tola21 = gold21gm * 11.664;
+
+      document.getElementById("g24").innerText = gold24gm.toFixed(3);
+      document.getElementById("g22").innerText = gold22gm.toFixed(3);
+      document.getElementById("g21gm").innerText = gold21gm.toFixed(3);
+      document.getElementById("g18").innerText = gold18gm.toFixed(3);
+      document.getElementById("tola21").innerText = tola21.toFixed(2);
+
+      const now = new Date();
+      const muscatTime = now.toLocaleString("en-US", {
+        timeZone: "Asia/Muscat",
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+      document.getElementById("time").innerText = 
+        `Last updated: ${muscatTime} (Muscat Time)`;
+    }
+
+    window.addEventListener("load", () => loadGoldPrice());
+    refreshBtn.addEventListener("click", () => loadGoldPrice(true));
+  </script>
+</body>
+</html>
