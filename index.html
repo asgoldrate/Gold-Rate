@@ -8,88 +8,88 @@
     body {
       margin: 0;
       padding: 10px;
-      background: #000833; /* logo ke blue se match */
+      background: #000833;
       color: #fff;
       font-family: Arial, sans-serif;
       text-align: center;
       min-height: 100vh;
     }
     .logo-container {
-      margin: 15px 0;
+      margin: 12px 0;
     }
     .logo-img {
-      width: 180px;
-      height: 180px;
+      width: clamp(110px, 35vw, 126px);  /* 30% chhota kar diya */
+      height: clamp(110px, 35vw, 126px);
       border-radius: 50%;
-      border: 4px solid #ffd700;
-      box-shadow: 0 6px 15px rgba(255,215,0,0.3);
+      border: 3px solid #ffd700;
+      box-shadow: 0 5px 12px rgba(255,215,0,0.3);
       object-fit: contain;
       background: #000833;
     }
     h1 {
       color: #00d4ff;
-      font-size: clamp(1.8em, 6vw, 2.2em);
-      margin: 10px 0 5px;
+      font-size: clamp(1.7em, 5.5vw, 2.1em);
+      margin: 8px 0 4px;
     }
     .arabic {
-      font-size: clamp(1.8em, 5vw, 2.4em);
+      font-size: clamp(1.7em, 4.8vw, 2.2em);
       color: #ffd700;
-      margin: 5px 0;
+      margin: 4px 0;
       font-weight: bold;
     }
     .social {
-      margin: 15px 0;
-      font-size: clamp(1.1em, 4vw, 1.3em);
+      margin: 12px 0;
+      font-size: clamp(1em, 3.8vw, 1.2em);
     }
     .social img {
-      width: 35px;
-      height: 35px;
+      width: 32px;
+      height: 32px;
       vertical-align: middle;
-      margin-right: 8px;
+      margin-right: 7px;
     }
     .whatsapp-container {
       background: #25D366;
       color: #000;
-      font-size: clamp(1.3em, 5vw, 1.6em);
+      font-size: clamp(1.2em, 4.5vw, 1.5em);
       font-weight: bold;
-      padding: 12px;
-      margin: 15px auto;
-      border-radius: 12px;
-      max-width: 380px;
+      padding: 10px;
+      margin: 12px auto;
+      border-radius: 10px;
+      max-width: 360px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      gap: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.5);
     }
     .whatsapp-container img {
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
     }
     #ounceUSD {
-      font-size: clamp(1.4em, 5vw, 1.6em);
+      font-size: clamp(1.3em, 4.8vw, 1.5em);
       color: #00ff7f;
-      margin: 20px 0 15px;
+      margin: 18px 0 12px;
       font-weight: bold;
     }
     table {
       width: 90%;
-      max-width: 420px;
-      margin: 0 auto 20px;
+      max-width: 400px;
+      margin: 0 auto 18px;
       border-collapse: collapse;
-      background: #001a3a; /* Updated table color – logo ke saath achha match + contrast */
+      background: #001a3a;
       border: 2px solid #00d4ff;
       border-radius: 8px;
       overflow: hidden;
-      font-size: clamp(0.95em, 3.5vw, 1.1em);
+      font-size: clamp(0.9em, 3.3vw, 1.05em);
     }
     th, td {
-      padding: 10px;
+      padding: 9px;
       border: 1px solid #004080;
       text-align: center;
     }
     th {
-      background: #000d24; /* Thoda darker header for better look */
+      background: #000d24;
       color: #00d4ff;
     }
     .karat {
@@ -99,32 +99,31 @@
     .refresh-btn {
       background: #00d4ff;
       color: #000;
-      font-size: clamp(1.2em, 5vw, 1.5em);
+      font-size: clamp(1.1em, 4.5vw, 1.4em);
       font-weight: bold;
-      padding: 12px;
-      margin: 25px auto 20px;
+      padding: 10px;
+      margin: 25px auto 15px;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       width: 90%;
-      max-width: 380px;
+      max-width: 360px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,212,255,0.5);
+      box-shadow: 0 3px 8px rgba(0,212,255,0.5);
     }
     .refresh-btn:hover { background: #00aaff; }
     .refresh-btn:disabled { background: #555; cursor: not-allowed; }
     .updated, #error {
-      font-size: clamp(0.9em, 3vw, 1em);
-      margin: 10px 0;
+      font-size: clamp(0.85em, 2.8vw, 0.95em);
+      margin: 8px 0;
     }
     .updated { color: #ccc; }
     #error { color: #ffcc00; font-weight: bold; }
 
-    /* Mobile optimizations */
     @media (max-width: 600px) {
-      body { padding: 8px; }
-      .logo-img { width: 150px; height: 150px; }
-      table { width: 100%; font-size: 0.95em; }
-      th, td { padding: 8px; }
+      body { padding: 6px; }
+      .logo-img { width: clamp(100px, 32vw, 115px); height: clamp(100px, 32vw, 115px); }
+      table { width: 100%; font-size: 0.9em; }
+      th, td { padding: 7px; }
     }
   </style>
 </head>
@@ -141,18 +140,17 @@
 
   <table>
     <tr>
-      <th>Karat / كarat</th>
-      <th>Unit / وحدة</th>
-      <th>Price OMR / سعر ر.ع</th>
+      <th>عيار / Aiyar</th>
+      <th>وحدة / Unit</th>
+      <th>سعر ر.ع / Price OMR</th>
     </tr>
-    <tr><td class="karat">24K</td><td>1 gm / جرام</td><td id="g24">Loading...</td></tr>
-    <tr><td class="karat">22K</td><td>1 gm / جرام</td><td id="g22">Loading...</td></tr>
-    <tr><td class="karat">21K</td><td>1 gm / جرام</td><td id="g21gm">Loading...</td></tr>
-    <tr><td class="karat">18K</td><td>1 gm / جرام</td><td id="g18">Loading...</td></tr>
-    <tr><td class="karat">21K</td><td>1 Tola / تولة (11.664 gm)</td><td id="tola21">Loading...</td></tr>
+    <tr><td class="karat">24K</td><td>1 جرام / gm</td><td id="g24">Loading...</td></tr>
+    <tr><td class="karat">22K</td><td>1 جرام / gm</td><td id="g22">Loading...</td></tr>
+    <tr><td class="karat">21K</td><td>1 جرام / gm</td><td id="g21gm">Loading...</td></tr>
+    <tr><td class="karat">18K</td><td>1 جرام / gm</td><td id="g18">Loading...</td></tr>
+    <tr><td class="karat">21K</td><td>1 تولة (11.664 جرام) / Tola (11.664 gm)</td><td id="tola21">Loading...</td></tr>
   </table>
 
-  <!-- Insta aur WhatsApp ko table ke niche rakha -->
   <div class="social">
     <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
     @sattardina_jewellery
@@ -160,17 +158,16 @@
 
   <div class="whatsapp-container">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-    WHATSAPP: 71171790
+    WHATSAPP: 95449739
   </div>
 
-  <!-- Refresh button sabse niche -->
   <button class="refresh-btn" id="refreshBtn">Refresh Rates</button>
 
   <p class="updated" id="time">Last updated: Loading... (Muscat Time)</p>
   <p id="error"></p>
 
   <script>
-    const API_KEY = "goldapi-h1s19mkylgyry-io";
+    const API_KEY = "goldapi-1xyh19mkymkg2y-io";
 
     const refreshBtn = document.getElementById("refreshBtn");
     let isLoading = false;
