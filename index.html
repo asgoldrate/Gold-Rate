@@ -199,10 +199,10 @@
         const ounceUSD = data.price;
         document.getElementById("ounceUSD").innerText = `Gold per Ounce (USD): ${ounceUSD.toFixed(2)}`;
 
-        const gold24gm = (ounceUSD * 1.4485 + 20) / 116.64;
-        const gold22gm = gold24gm * 0.920;
-        const gold21gm = gold24gm * 0.879;
-        const gold18gm = gold24gm * 0.754;
+        const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
+        const gold22gm = gold24gm * 0.921;
+        const gold21gm = gold24gm * 0.880;
+        const gold18gm = gold24gm * 0.755;
         const tola21 = gold21gm * 11.664;
 
         document.getElementById("g24").innerText = gold24gm.toFixed(3);
