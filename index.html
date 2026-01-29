@@ -14,64 +14,19 @@
       text-align: center;
       min-height: 100vh;
     }
-    .logo-container {
-      margin: 12px 0;
-    }
+    .logo-container { margin: 15px 0 10px; }
     .logo-img {
-      width: clamp(110px, 35vw, 126px);  /* 30% chhota kar diya */
-      height: clamp(110px, 35vw, 126px);
+      width: clamp(100px, 32vw, 120px);
+      height: clamp(100px, 32vw, 120px);
       border-radius: 50%;
       border: 3px solid #ffd700;
       box-shadow: 0 5px 12px rgba(255,215,0,0.3);
       object-fit: contain;
       background: #000833;
     }
-    h1 {
-      color: #00d4ff;
-      font-size: clamp(1.7em, 5.5vw, 2.1em);
-      margin: 8px 0 4px;
-    }
-    .arabic {
-      font-size: clamp(1.7em, 4.8vw, 2.2em);
-      color: #ffd700;
-      margin: 4px 0;
-      font-weight: bold;
-    }
-    .social {
-      margin: 12px 0;
-      font-size: clamp(1em, 3.8vw, 1.2em);
-    }
-    .social img {
-      width: 32px;
-      height: 32px;
-      vertical-align: middle;
-      margin-right: 7px;
-    }
-    .whatsapp-container {
-      background: #25D366;
-      color: #000;
-      font-size: clamp(1.2em, 4.5vw, 1.5em);
-      font-weight: bold;
-      padding: 10px;
-      margin: 12px auto;
-      border-radius: 10px;
-      max-width: 360px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.5);
-    }
-    .whatsapp-container img {
-      width: 40px;
-      height: 40px;
-    }
-    #ounceUSD {
-      font-size: clamp(1.3em, 4.8vw, 1.5em);
-      color: #00ff7f;
-      margin: 18px 0 12px;
-      font-weight: bold;
-    }
+    h1 { color: #00d4ff; font-size: clamp(1.7em, 5.5vw, 2.1em); margin: 8px 0 4px; }
+    .arabic { font-size: clamp(1.7em, 4.8vw, 2.2em); color: #ffd700; margin: 4px 0; font-weight: bold; }
+    #ounceUSD { font-size: clamp(1.3em, 4.8vw, 1.5em); color: #00ff7f; margin: 18px 0 12px; font-weight: bold; }
     table {
       width: 90%;
       max-width: 400px;
@@ -83,26 +38,16 @@
       overflow: hidden;
       font-size: clamp(0.9em, 3.3vw, 1.05em);
     }
-    th, td {
-      padding: 9px;
-      border: 1px solid #004080;
-      text-align: center;
-    }
-    th {
-      background: #000d24;
-      color: #00d4ff;
-    }
-    .karat {
-      color: #ffd700;
-      font-weight: bold;
-    }
+    th, td { padding: 9px; border: 1px solid #004080; text-align: center; }
+    th { background: #000d24; color: #00d4ff; }
+    .karat { color: #ffd700; font-weight: bold; }
     .refresh-btn {
       background: #00d4ff;
       color: #000;
       font-size: clamp(1.1em, 4.5vw, 1.4em);
       font-weight: bold;
       padding: 10px;
-      margin: 25px auto 15px;
+      margin: 25px auto 25px;
       border: none;
       border-radius: 10px;
       width: 90%;
@@ -112,16 +57,13 @@
     }
     .refresh-btn:hover { background: #00aaff; }
     .refresh-btn:disabled { background: #555; cursor: not-allowed; }
-    .updated, #error {
-      font-size: clamp(0.85em, 2.8vw, 0.95em);
-      margin: 8px 0;
-    }
+    .updated, #error { font-size: clamp(0.85em, 2.8vw, 0.95em); margin: 8px 0; }
     .updated { color: #ccc; }
     #error { color: #ffcc00; font-weight: bold; }
 
     @media (max-width: 600px) {
       body { padding: 6px; }
-      .logo-img { width: clamp(100px, 32vw, 115px); height: clamp(100px, 32vw, 115px); }
+      .logo-img { width: clamp(95px, 30vw, 110px); height: clamp(95px, 30vw, 110px); }
       table { width: 100%; font-size: 0.9em; }
       th, td { padding: 7px; }
     }
@@ -140,15 +82,15 @@
 
   <table>
     <tr>
-      <th>عيار / Karat</th>
+      <th>عيار / Aiyar</th>
       <th>وحدة / Unit</th>
       <th>سعر ر.ع / Price OMR</th>
     </tr>
-    <tr><td class="karat">24K</td><td>1 جرام / gm</td><td id="g24">Loading...</td></tr>
-    <tr><td class="karat">22K</td><td>1 جرام / gm</td><td id="g22">Loading...</td></tr>
-    <tr><td class="karat">21K</td><td>1 جرام / gm</td><td id="g21gm">Loading...</td></tr>
-    <tr><td class="karat">18K</td><td>1 جرام / gm</td><td id="g18">Loading...</td></tr>
-    <tr><td class="karat">21K</td><td>1 تولة (11.664 جرام) / Tola (11.664 gm)</td><td id="tola21">Loading...</td></tr>
+    <tr><td class="karat">24K</td><td>1 جرام / 1 gm</td><td id="g24">Loading...</td></tr>
+    <tr><td class="karat">22K</td><td>1 جرام / 1 gm</td><td id="g22">Loading...</td></tr>
+    <tr><td class="karat">21K</td><td>1 جرام / 1 gm</td><td id="g21gm">Loading...</td></tr>
+    <tr><td class="karat">18K</td><td>1 جرام / 1 gm</td><td id="g18">Loading...</td></tr>
+    <tr><td class="karat">21K</td><td>1 تولة (11.664 جرام) / 1 Tola (11.664 gm)</td><td id="tola21">Loading...</td></tr>
   </table>
 
   <div class="social">
