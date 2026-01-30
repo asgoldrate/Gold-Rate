@@ -146,7 +146,7 @@
 
   <table>
     <tr>
-      <th>عيار / Aiyar</th>
+      <th>عيار / Karat</th>
       <th>وحدة / Unit</th>
       <th>سعر ر.ع / Price OMR</th>
     </tr>
@@ -174,7 +174,7 @@
   <p id="error"></p>
 
   <script>
-    const API_KEY = "goldapi-h5rolsmkzbgcc5-io";
+    const API_KEY = "29d3c11a6eb2bce41f005db873e9116029d3c11a";  // GoldPriceZ key
 
     const refreshBtn = document.getElementById("refreshBtn");
     let isLoading = false;
@@ -189,31 +189,37 @@
       refreshBtn.innerText = "Refreshing...";
 
       try {
-        const res = await fetch("https://www.goldapi.io/api/XAU/USD", {
+        const res = await fetch("https://goldpricez.com/api/rates/currency/usd/measure/all", {
           method: "GET",
-          headers: { "x-access-token": API_KEY }
+          headers: { "X-API-KEY": API_KEY }
         });
 
-        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        if (!res.ok) throw new Error(`API error: ${res.status} - Check key, limit, or endpoint`);
 
         const data = await res.json();
 
-        if (!data.price || isNaN(data.price)) throw new Error("No valid price");
+        // Sirf ounce price fetch (field name docs ke mutabiq "ounce_price_usd")
+        if (!data.ounce_price_usd || isNaN(parseFloat(data.ounce_price_usd))) {
+          throw new Error("No valid ounce price in response");
+        }
 
-        const ounceUSD = data.price;
+        const ounceUSD = parseFloat(data.ounce_price_usd);
         document.getElementById("ounceUSD").innerText = `Gold per Ounce (USD): ${ounceUSD.toFixed(2)}`;
 
+        // Tere purane formula se calculations
         const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
-        const gold22gm = gold24gm * 0.921;
+        const gold22gm = gold24gm * 0.920;
         const gold21gm = gold24gm * 0.880;
         const gold18gm = gold24gm * 0.755;
         const tola21 = gold21gm * 11.664;
 
-        document.getElementById("g24").innerText = gold24gm.toFixed(3) + " OMR";
-        document.getElementById("g22").innerText = gold22gm.toFixed(3) + " OMR";
-        document.getElementById("g21gm").innerText = gold21gm.toFixed(3) + " OMR";
-        document.getElementById("g18").innerText = gold18gm.toFixed(3) + " OMR";
-        document.getElementById("tola21").innerText = tola21.toFixed(2) + " OMR";
+        // OMR conversion (static rate, agar real-time chahiye to bata dena)
+        const USD_TO_OMR = 0.385;
+        document.getElementById("g24").innerText = (gold24gm * USD_TO_OMR).toFixed(3) + " OMR";
+        document.getElementById("g22").innerText = (gold22gm * USD_TO_OMR).toFixed(3) + " OMR";
+        document.getElementById("g21gm").innerText = (gold21gm * USD_TO_OMR).toFixed(3) + " OMR";
+        document.getElementById("g18").innerText = (gold18gm * USD_TO_OMR).toFixed(3) + " OMR";
+        document.getElementById("tola21").innerText = (tola21 * USD_TO_OMR).toFixed(2) + " OMR";
 
         const now = new Date();
         const muscatTime = now.toLocaleString('en-US', { 
@@ -224,7 +230,7 @@
         document.getElementById("time").innerText = `Last updated: ${muscatTime}`;
 
       } catch (err) {
-        errorEl.innerText = "Error loading rates: " + err.message;
+        errorEl.innerText = "Error: " + err.message + " (Key valid? Limit cross?)";
         document.getElementById("ounceUSD").innerText = "Error";
       } finally {
         isLoading = false;
