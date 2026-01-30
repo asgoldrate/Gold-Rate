@@ -77,7 +77,6 @@
       color: #00ff7f;
       margin: 18px 0 12px;
       font-weight: bold;
-      min-height: 80px; /* widget ke liye space rakha */
     }
     table {
       width: 90%;
@@ -143,25 +142,11 @@
   <h1>SATTARDINA JEWELLERY</h1>
   <div class="arabic">مجوهرات ستاردينا</div>
 
-  <!-- TradingView Widget yahan daala hai – live Gold price dikhega -->
-  <div id="ounceUSD">
-    <div class="tradingview-widget-container" style="height: 100px; width: 100%; max-width: 400px; margin: 0 auto;">
-      <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-      {
-        "symbol": "OANDA:XAUUSD",
-        "width": "100%",
-        "colorTheme": "dark",
-        "isTransparent": false,
-        "locale": "en"
-      }
-      </script>
-    </div>
-  </div>
+  <div id="ounceUSD">Gold per Ounce (USD): Loading...</div>
 
   <table>
     <tr>
-      <th>عيار / Aiyar</th>
+      <th>عيار / Karat</th>
       <th>وحدة / Unit</th>
       <th>سعر ر.ع / Price OMR</th>
     </tr>
@@ -189,8 +174,8 @@
   <p id="error"></p>
 
   <script>
-    // Ab sirf table ke liye calculations rakh rahe hain (widget live price dega)
-    // Agar chahte ho toh widget se price nikaal ke calculations mein use kar sakte hain (advanced hai)
+    const API_KEY = "goldapi-c1v6w5sml0otz2o-io";
+
     const refreshBtn = document.getElementById("refreshBtn");
     let isLoading = false;
 
@@ -203,11 +188,32 @@
       refreshBtn.disabled = true;
       refreshBtn.innerText = "Refreshing...";
 
-      // Widget live price de raha hai, toh ab sirf table update kar sakte hain agar chaho
-      // Ya pura calculation rakho (static fallback ke liye)
       try {
-        // Optional: agar widget se price extract karna ho toh yahan logic daal sakte hain
-        // Abhi sirf dummy loading dikhate hain, actual mein widget live dikha raha hai
+        const res = await fetch("https://www.goldapi.io/api/XAU/USD", {
+          method: "GET",
+          headers: { "x-access-token": API_KEY }
+        });
+
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+
+        const data = await res.json();
+
+        if (!data.price || isNaN(data.price)) throw new Error("No valid price");
+
+        const ounceUSD = data.price;
+        document.getElementById("ounceUSD").innerText = `Gold per Ounce (USD): ${ounceUSD.toFixed(2)}`;
+
+        const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
+        const gold22gm = gold24gm * 0.921;
+        const gold21gm = gold24gm * 0.880;
+        const gold18gm = gold24gm * 0.755;
+        const tola21 = gold21gm * 11.664;
+
+        document.getElementById("g24").innerText = gold24gm.toFixed(3) + " OMR";
+        document.getElementById("g22").innerText = gold22gm.toFixed(3) + " OMR";
+        document.getElementById("g21gm").innerText = gold21gm.toFixed(3) + " OMR";
+        document.getElementById("g18").innerText = gold18gm.toFixed(3) + " OMR";
+        document.getElementById("tola21").innerText = tola21.toFixed(2) + " OMR";
 
         const now = new Date();
         const muscatTime = now.toLocaleString('en-US', { 
@@ -218,7 +224,8 @@
         document.getElementById("time").innerText = `Last updated: ${muscatTime}`;
 
       } catch (err) {
-        errorEl.innerText = "Error updating time: " + err.message;
+        errorEl.innerText = "Error loading rates: " + err.message;
+        document.getElementById("ounceUSD").innerText = "Error";
       } finally {
         isLoading = false;
         refreshBtn.disabled = false;
