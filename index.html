@@ -38,14 +38,23 @@
       font-weight: bold;
     }
     .social {
-      margin: 12px 0;
+      margin: 8px 0 20px;
       font-size: clamp(1em, 3.8vw, 1.2em);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
     .social img {
       width: 32px;
       height: 32px;
       vertical-align: middle;
-      margin-right: 7px;
+    }
+    .updated-time {
+      font-size: clamp(0.9em, 3vw, 1em);
+      color: #ccc;
+      margin: -8px 0 12px;
+      font-weight: normal;
     }
     .whatsapp-container {
       background: #25D366;
@@ -112,12 +121,12 @@
     }
     .refresh-btn:hover { background: #00aaff; }
     .refresh-btn:disabled { background: #555; cursor: not-allowed; }
-    .updated, #error {
+    #error {
       font-size: clamp(0.85em, 2.8vw, 0.95em);
       margin: 8px 0;
+      color: #ffcc00;
+      font-weight: bold;
     }
-    .updated { color: #ccc; }
-    #error { color: #ffcc00; font-weight: bold; }
 
     @media (max-width: 600px) {
       body { padding: 6px; }
@@ -136,11 +145,18 @@
   <h1>SATTARDINA JEWELLERY</h1>
   <div class="arabic">مجوهرات ستاردينا</div>
 
+  <div class="social">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+    @sattardina_jewellery
+  </div>
+
+  <p class="updated-time" id="time">Last updated: Loading...</p>
+
   <div id="ounceUSD">Gold per Ounce (USD): Loading...</div>
 
   <table>
     <tr>
-      <th>عيار / Aiyar</th>
+      <th>عيار / Karat</th>
       <th>وحدة / Unit</th>
       <th>سعر ر.ع / Price OMR</th>
     </tr>
@@ -151,11 +167,6 @@
     <tr><td class="karat">21K</td><td>1 Tola / تولة (11.664 gm)</td><td id="tola21">Loading...</td></tr>
   </table>
 
-  <div class="social">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-    @sattardina_jewellery
-  </div>
-
   <div class="whatsapp-container">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
     WHATSAPP: 71171790
@@ -163,7 +174,6 @@
 
   <button class="refresh-btn" id="refreshBtn">Refresh Rates</button>
 
-  <p class="updated" id="time">Last updated: Loading... (Muscat Time)</p>
   <p id="error"></p>
 
   <script>
@@ -202,18 +212,22 @@
         const gold18gm = gold24gm * 0.755;
         const tola21 = gold21gm * 11.664;
 
-        document.getElementById("g24").innerText = gold24gm.toFixed(3);
-        document.getElementById("g22").innerText = gold22gm.toFixed(3);
-        document.getElementById("g21gm").innerText = gold21gm.toFixed(3);
-        document.getElementById("g18").innerText = gold18gm.toFixed(3);
-        document.getElementById("tola21").innerText = tola21.toFixed(2);
+        document.getElementById("g24").innerText = gold24gm.toFixed(3) + " OMR";
+        document.getElementById("g22").innerText = gold22gm.toFixed(3) + " OMR";
+        document.getElementById("g21gm").innerText = gold21gm.toFixed(3) + " OMR";
+        document.getElementById("g18").innerText = gold18gm.toFixed(3) + " OMR";
+        document.getElementById("tola21").innerText = tola21.toFixed(2) + " OMR";
 
         const now = new Date();
-        const muscatTime = now.toLocaleString('en-US', { timeZone: 'Asia/Muscat', dateStyle: 'medium', timeStyle: 'short' });
-        document.getElementById("time").innerText = `Last updated: ${muscatTime} (Muscat Time)`;
+        const muscatTime = now.toLocaleString('en-US', { 
+          timeZone: 'Asia/Muscat', 
+          dateStyle: 'medium', 
+          timeStyle: 'short' 
+        });
+        document.getElementById("time").innerText = `Last updated: ${muscatTime}`;
 
       } catch (err) {
-        errorEl.innerText = "Error: " + err.message;
+        errorEl.innerText = "Error loading rates: " + err.message;
         document.getElementById("ounceUSD").innerText = "Error";
       } finally {
         isLoading = false;
