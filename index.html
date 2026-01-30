@@ -142,11 +142,11 @@
   <h1>SATTARDINA JEWELLERY</h1>
   <div class="arabic">مجوهرات ستاردينا</div>
 
-  <div id="ounceUSD">Gold per Ounce (USD): Loading...</div>
+  <div id="ounceUSD">Gold per Ounce (USD): 4894.33</div>
 
   <table>
     <tr>
-      <th>عيار / Karat</th>
+      <th>عيار / Aiyar</th>
       <th>وحدة / Unit</th>
       <th>سعر ر.ع / Price OMR</th>
     </tr>
@@ -174,46 +174,37 @@
   <p id="error"></p>
 
   <script>
-    const API_KEY = "goldapi-c1v6w5sml0otz2o-io";
+    const FIXED_OUNCE_USD = 4894.33;  // Abhi ke liye fixed price
 
     const refreshBtn = document.getElementById("refreshBtn");
     let isLoading = false;
 
-    async function loadGoldPrice() {
+    function updatePrices() {
       const errorEl = document.getElementById("error");
       errorEl.innerText = "";
 
-      if (isLoading) return;
       isLoading = true;
       refreshBtn.disabled = true;
       refreshBtn.innerText = "Refreshing...";
 
       try {
-        const res = await fetch("https://www.goldapi.io/api/XAU/USD", {
-          method: "GET",
-          headers: { "x-access-token": API_KEY }
-        });
-
-        if (!res.ok) throw new Error(`API error: ${res.status}`);
-
-        const data = await res.json();
-
-        if (!data.price || isNaN(data.price)) throw new Error("No valid price");
-
-        const ounceUSD = data.price;
+        const ounceUSD = FIXED_OUNCE_USD;
         document.getElementById("ounceUSD").innerText = `Gold per Ounce (USD): ${ounceUSD.toFixed(2)}`;
 
+        // Tere purane formula se calculations
         const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
-        const gold22gm = gold24gm * 0.921;
+        const gold22gm = gold24gm * 0.920;
         const gold21gm = gold24gm * 0.880;
         const gold18gm = gold24gm * 0.755;
         const tola21 = gold21gm * 11.664;
 
-        document.getElementById("g24").innerText = gold24gm.toFixed(3) + " OMR";
-        document.getElementById("g22").innerText = gold22gm.toFixed(3) + " OMR";
-        document.getElementById("g21gm").innerText = gold21gm.toFixed(3) + " OMR";
-        document.getElementById("g18").innerText = gold18gm.toFixed(3) + " OMR";
-        document.getElementById("tola21").innerText = tola21.toFixed(2) + " OMR";
+        // OMR conversion
+        const USD_TO_OMR = 0.385;
+        document.getElementById("g24").innerText = (gold24gm * USD_TO_OMR).toFixed(3) + " OMR";
+        document.getElementById("g22").innerText = (gold22gm * USD_TO_OMR).toFixed(3) + " OMR";
+        document.getElementById("g21gm").innerText = (gold21gm * USD_TO_OMR).toFixed(3) + " OMR";
+        document.getElementById("g18").innerText = (gold18gm * USD_TO_OMR).toFixed(3) + " OMR";
+        document.getElementById("tola21").innerText = (tola21 * USD_TO_OMR).toFixed(2) + " OMR";
 
         const now = new Date();
         const muscatTime = now.toLocaleString('en-US', { 
@@ -224,8 +215,7 @@
         document.getElementById("time").innerText = `Last updated: ${muscatTime}`;
 
       } catch (err) {
-        errorEl.innerText = "Error loading rates: " + err.message;
-        document.getElementById("ounceUSD").innerText = "Error";
+        errorEl.innerText = "Error: " + err.message;
       } finally {
         isLoading = false;
         refreshBtn.disabled = false;
@@ -233,8 +223,8 @@
       }
     }
 
-    window.addEventListener('load', loadGoldPrice);
-    refreshBtn.addEventListener('click', loadGoldPrice);
+    window.addEventListener('load', updatePrices);
+    refreshBtn.addEventListener('click', updatePrices);
   </script>
 </body>
 </html>
