@@ -174,7 +174,7 @@
   <p id="error"></p>
 
   <script>
-    const FIXED_OUNCE_USD = 4894.33;  // Fixed price jo tune diya
+    const FIXED_OUNCE_USD = 4894.33;  // Sirf yeh fixed, koi conversion nahi
 
     const refreshBtn = document.getElementById("refreshBtn");
     let isLoading = false;
@@ -191,20 +191,19 @@
         const ounceUSD = FIXED_OUNCE_USD;
         document.getElementById("ounceUSD").innerText = `Gold per Ounce (USD): ${ounceUSD.toFixed(2)}`;
 
-        // Tere original formula (bilkul same)
+        // Tere original formula (bilkul wahi, bina kisi extra multiply ke)
         const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
-        const gold22gm = gold24gm * 0.921;
+        const gold22gm = gold24gm * 0.920;
         const gold21gm = gold24gm * 0.880;
         const gold18gm = gold24gm * 0.755;
         const tola21 = gold21gm * 11.664;
 
-        // OMR conversion (0.385 static rate)
-        const USD_TO_OMR = 0.385;
-        document.getElementById("g24").innerText = (gold24gm * USD_TO_OMR).toFixed(3) + " OMR";
-        document.getElementById("g22").innerText = (gold22gm * USD_TO_OMR).toFixed(3) + " OMR";
-        document.getElementById("g21gm").innerText = (gold21gm * USD_TO_OMR).toFixed(3) + " OMR";
-        document.getElementById("g18").innerText = (gold18gm * USD_TO_OMR).toFixed(3) + " OMR";
-        document.getElementById("tola21").innerText = (tola21 * USD_TO_OMR).toFixed(2) + " OMR";
+        // Prices direct daal rahe hain (tere formula ke hisab se jo banta hai)
+        document.getElementById("g24").innerText = gold24gm.toFixed(3) + " OMR";
+        document.getElementById("g22").innerText = gold22gm.toFixed(3) + " OMR";
+        document.getElementById("g21gm").innerText = gold21gm.toFixed(3) + " OMR";
+        document.getElementById("g18").innerText = gold18gm.toFixed(3) + " OMR";
+        document.getElementById("tola21").innerText = tola21.toFixed(2) + " OMR";
 
         // Time update
         const now = new Date();
@@ -224,7 +223,7 @@
       }
     }
 
-    // Page load hote hi prices update kar do
+    // Page khulte hi update
     window.addEventListener('load', updatePrices);
     refreshBtn.addEventListener('click', updatePrices);
   </script>
