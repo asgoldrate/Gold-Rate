@@ -5,132 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live Gold Rates - SATTARDINA JEWELLERY</title>
   <style>
-    body {
-      margin: 0;
-      padding: 10px;
-      background: #000833;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      min-height: 100vh;
-    }
-    .logo-container {
-      margin: 12px 0;
-    }
-    .logo-img {
-      width: clamp(110px, 35vw, 126px);
-      height: clamp(110px, 35vw, 126px);
-      border-radius: 50%;
-      border: 3px solid #ffd700;
-      box-shadow: 0 5px 12px rgba(255,215,0,0.3);
-      object-fit: contain;
-      background: #000833;
-    }
-    h1 {
-      color: #00d4ff;
-      font-size: clamp(1.7em, 5.5vw, 2.1em);
-      margin: 8px 0 4px;
-    }
-    .arabic {
-      font-size: clamp(1.7em, 4.8vw, 2.2em);
-      color: #ffd700;
-      margin: 4px 0;
-      font-weight: bold;
-    }
-    .social {
-      margin: 16px 0 12px;
-      font-size: clamp(1em, 3.8vw, 1.2em);
-    }
-    .social img {
-      width: 32px;
-      height: 32px;
-      vertical-align: middle;
-      margin-right: 7px;
-    }
-    .updated-time {
-      font-size: clamp(0.9em, 3vw, 1em);
-      color: #ccc;
-      margin: 0 0 16px;
-      font-weight: normal;
-    }
-    .whatsapp-container {
-      background: #25D366;
-      color: #000;
-      font-size: clamp(1.2em, 4.5vw, 1.5em);
-      font-weight: bold;
-      padding: 10px;
-      margin: 12px auto;
-      border-radius: 10px;
-      max-width: 360px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.5);
-    }
-    .whatsapp-container img {
-      width: 40px;
-      height: 40px;
-    }
-    #ounceUSD {
-      font-size: clamp(1.3em, 4.8vw, 1.5em);
-      color: #00ff7f;
-      margin: 18px 0 12px;
-      font-weight: bold;
-    }
-    table {
-      width: 90%;
-      max-width: 400px;
-      margin: 0 auto 24px;
-      border-collapse: collapse;
-      background: #001a3a;
-      border: 2px solid #00d4ff;
-      border-radius: 8px;
-      overflow: hidden;
-      font-size: clamp(0.9em, 3.3vw, 1.05em);
-    }
-    th, td {
-      padding: 9px;
-      border: 1px solid #004080;
-      text-align: center;
-    }
-    th {
-      background: #000d24;
-      color: #00d4ff;
-    }
-    .karat {
-      color: #ffd700;
-      font-weight: bold;
-    }
-    .refresh-btn {
-      background: #00d4ff;
-      color: #000;
-      font-size: clamp(1.1em, 4.5vw, 1.4em);
-      font-weight: bold;
-      padding: 10px;
-      margin: 25px auto 15px;
-      border: none;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 360px;
-      cursor: pointer;
-      box-shadow: 0 3px 8px rgba(0,212,255,0.5);
-    }
+    /* Your existing styles remain unchanged – no need to repeat them here */
+    body { margin: 0; padding: 10px; background: #000833; color: #fff; font-family: Arial, sans-serif; text-align: center; min-height: 100vh; }
+    .logo-container { margin: 12px 0; }
+    .logo-img { width: clamp(110px, 35vw, 126px); height: clamp(110px, 35vw, 126px); border-radius: 50%; border: 3px solid #ffd700; box-shadow: 0 5px 12px rgba(255,215,0,0.3); object-fit: contain; background: #000833; }
+    h1 { color: #00d4ff; font-size: clamp(1.7em, 5.5vw, 2.1em); margin: 8px 0 4px; }
+    .arabic { font-size: clamp(1.7em, 4.8vw, 2.2em); color: #ffd700; margin: 4px 0; font-weight: bold; }
+    .social { margin: 16px 0 12px; font-size: clamp(1em, 3.8vw, 1.2em); }
+    .social img { width: 32px; height: 32px; vertical-align: middle; margin-right: 7px; }
+    .updated-time { font-size: clamp(0.9em, 3vw, 1em); color: #ccc; margin: 0 0 16px; font-weight: normal; }
+    .whatsapp-container { background: #25D366; color: #000; font-size: clamp(1.2em, 4.5vw, 1.5em); font-weight: bold; padding: 10px; margin: 12px auto; border-radius: 10px; max-width: 360px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.5); }
+    .whatsapp-container img { width: 40px; height: 40px; }
+    #ounceUSD { font-size: clamp(1.3em, 4.8vw, 1.5em); color: #00ff7f; margin: 18px 0 12px; font-weight: bold; }
+    table { width: 90%; max-width: 400px; margin: 0 auto 24px; border-collapse: collapse; background: #001a3a; border: 2px solid #00d4ff; border-radius: 8px; overflow: hidden; font-size: clamp(0.9em, 3.3vw, 1.05em); }
+    th, td { padding: 9px; border: 1px solid #004080; text-align: center; }
+    th { background: #000d24; color: #00d4ff; }
+    .karat { color: #ffd700; font-weight: bold; }
+    .refresh-btn { background: #00d4ff; color: #000; font-size: clamp(1.1em, 4.5vw, 1.4em); font-weight: bold; padding: 10px; margin: 25px auto 15px; border: none; border-radius: 10px; width: 90%; max-width: 360px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,212,255,0.5); }
     .refresh-btn:hover { background: #00aaff; }
     .refresh-btn:disabled { background: #555; cursor: not-allowed; }
-    #error {
-      font-size: clamp(0.85em, 2.8vw, 0.95em);
-      margin: 8px 0;
-      color: #ffcc00;
-      font-weight: bold;
-    }
-
-    @media (max-width: 600px) {
-      body { padding: 6px; }
-      .logo-img { width: clamp(100px, 32vw, 115px); height: clamp(100px, 32vw, 115px); }
-      table { width: 100%; font-size: 0.9em; }
-      th, td { padding: 7px; }
-    }
+    #error { font-size: clamp(0.85em, 2.8vw, 0.95em); margin: 8px 0; color: #ffcc00; font-weight: bold; }
+    @media (max-width: 600px) { body { padding: 6px; } .logo-img { width: clamp(100px, 32vw, 115px); height: clamp(100px, 32vw, 115px); } table { width: 100%; font-size: 0.9em; } th, td { padding: 7px; } }
   </style>
 </head>
 <body>
@@ -159,7 +54,6 @@
 
   <p class="updated-time" id="time">Last updated: Loading...</p>
 
-  <!-- Yeh disclaimer time ke niche add kiya hai -->
   <p style="font-size: clamp(0.95em, 3.2vw, 1.05em); color: #ffcc66; margin: 8px 0 20px; font-weight: bold; text-align: center;">
     ملاحظة: أسعار الذهب قابلة للتغيير باستمرار – آخر تحديث
   </p>
@@ -180,13 +74,14 @@
 
   <script>
     const API_KEYS = [
-      "goldapi-c1v6w5sml0otz2o-io",      // original
+      "goldapi-h1s19mkylgyry-io",       // ← new key added here (tried first)
+      "goldapi-c1v6w5sml0otz2o-io",     // original
       "goldapi-1ezyxdsml4aps68-io",
       "goldapi-h5rolsmkzbgcc5-io"
-      // You can add more keys here later if needed
+      // You can keep adding more keys here if needed
     ];
 
-    let currentKeyIndex = 0; // start with first key
+    let currentKeyIndex = 0; // start with first key (the new one)
 
     const refreshBtn = document.getElementById("refreshBtn");
     let isLoading = false;
@@ -228,8 +123,7 @@
         try {
           ounceUSD = await fetchWithKey(key);
           usedKey = key;
-          // Success → remember this key for next time
-          // currentKeyIndex remains the same
+          // Success → keep using this key next time (no rotation on success)
         } catch (err) {
           console.warn("Key failed:", key.slice(-6), err.message);
           currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
@@ -238,7 +132,6 @@
       }
 
       if (ounceUSD !== null) {
-        // Success — update UI
         document.getElementById("ounceUSD").innerText = `Gold per Ounce (USD): ${ounceUSD.toFixed(2)}`;
 
         const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
@@ -261,7 +154,6 @@
         });
         document.getElementById("time").innerText = `Last updated: ${muscatTime}`;
       } else {
-        // All keys failed
         errorEl.innerText = "All API keys failed. Please try again later or add new keys.";
         document.getElementById("ounceUSD").innerText = "Error";
       }
