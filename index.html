@@ -73,37 +73,8 @@
   <p id="error"></p>
 
   <script>
-    const API_KEYS = [
-      "goldapi-h1s19mkylgyry-io",       // ← new key added here (tried first)
-      "goldapi-c1v6w5sml0otz2o-io",     // original
-      "goldapi-1ezyxdsml4aps68-io",
-      "goldapi-h5rolsmkzbgcc5-io"
-      // You can keep adding more keys here if needed
-    ];
-
-    let currentKeyIndex = 0; // start with first key (the new one)
-
     const refreshBtn = document.getElementById("refreshBtn");
     let isLoading = false;
-
-    async function fetchWithKey(key) {
-      const res = await fetch("https://www.goldapi.io/api/XAU/USD", {
-        method: "GET",
-        headers: { "x-access-token": key }
-      });
-
-      if (!res.ok) {
-        throw new Error(`API error: ${res.status} (key: ${key.slice(-6)}...)`);
-      }
-
-      const data = await res.json();
-
-      if (!data.price || isNaN(data.price)) {
-        throw new Error("No valid price returned");
-      }
-
-      return data.price;
-    }
 
     async function loadGoldPrice() {
       const errorEl = document.getElementById("error");
@@ -114,26 +85,24 @@
       refreshBtn.disabled = true;
       refreshBtn.innerText = "Refreshing...";
 
-      let ounceUSD = null;
-      let usedKey = null;
-      let triedKeys = 0;
-
-      while (triedKeys < API_KEYS.length && ounceUSD === null) {
-        const key = API_KEYS[currentKeyIndex];
-        try {
-          ounceUSD = await fetchWithKey(key);
-          usedKey = key;
-          // Success → keep using this key next time (no rotation on success)
-        } catch (err) {
-          console.warn("Key failed:", key.slice(-6), err.message);
-          currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
-          triedKeys++;
+      try {
+        const response = await fetch('https://api.gold-api.com/price/XAU');
+        
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
         }
-      }
 
-      if (ounceUSD !== null) {
+        const data = await response.json();
+
+        if (!data.price || isNaN(data.price)) {
+          throw new Error("No valid price in response");
+        }
+
+        const ounceUSD = data.price;
+
         document.getElementById("ounceUSD").innerText = `Gold per Ounce (USD): ${ounceUSD.toFixed(2)}`;
 
+        // Your existing calculations (unchanged)
         const gold24gm = (ounceUSD * 1.4485 + 15) / 116.64;
         const gold22gm = gold24gm * 0.921;
         const gold21gm = gold24gm * 0.880;
@@ -153,8 +122,10 @@
           timeStyle: 'short' 
         });
         document.getElementById("time").innerText = `Last updated: ${muscatTime}`;
-      } else {
-        errorEl.innerText = "All API keys failed. Please try again later or add new keys.";
+
+      } catch (err) {
+        console.error("Error fetching gold price:", err);
+        errorEl.innerText = "Error loading rates. Please try again or check internet.";
         document.getElementById("ounceUSD").innerText = "Error";
       }
 
@@ -163,8 +134,18 @@
       refreshBtn.innerText = "Refresh Rates";
     }
 
+    // Load on page open
     window.addEventListener('load', loadGoldPrice);
+    
+    // Manual refresh button
     refreshBtn.addEventListener('click', loadGoldPrice);
+
+    // Auto-refresh every 5 minutes (300000 ms) - ON now!
+    setInterval(loadGoldPrice, 300000);
+
+    // Agar aap change karna chahein:
+    // - Har 1 minute ke liye: setInterval(loadGoldPrice, 60000);
+    // - Har 10 minutes ke liye: setInterval(loadGoldPrice, 600000);
   </script>
 </body>
 </html>
