@@ -12,6 +12,54 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live Gold Rates - SATTARDINA JEWELLERY</title>
+  <meta name="theme-color" content="#050a2b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Gold Rates">
+  <script>
+    // Installable app (Chrome): manifest + icons are generated here, no extra files needed
+    (function () {
+      function makeIcon(size, maskable) {
+        var c = document.createElement('canvas'); c.width = c.height = size;
+        var x = c.getContext('2d'), m = size / 2, r = size * (maskable ? 0.30 : 0.40);
+        x.fillStyle = '#050a2b'; x.fillRect(0, 0, size, size);
+        x.beginPath(); x.arc(m, m, r, 0, Math.PI * 2);
+        x.fillStyle = '#f5c542'; x.fill();
+        x.lineWidth = Math.max(2, size / 64); x.strokeStyle = '#ffe08a'; x.stroke();
+        x.fillStyle = '#2a1d00'; x.font = 'bold ' + (r * 1.25) + 'px Arial, sans-serif';
+        x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('S', m, m + size * 0.02);
+        return c.toDataURL('image/png');
+      }
+      try {
+        var base = location.origin + location.pathname;
+        var manifest = {
+          name: 'Sattardina Jewellery - Live Gold Rates',
+          short_name: 'Gold Rates',
+          start_url: base,
+          scope: base.replace(/[^\/]*$/, ''),
+          display: 'fullscreen',
+          display_override: ['fullscreen', 'standalone'],
+          orientation: 'portrait',
+          background_color: '#050a2b',
+          theme_color: '#050a2b',
+          icons: [
+            { src: makeIcon(192, false), sizes: '192x192', type: 'image/png', purpose: 'any' },
+            { src: makeIcon(512, false), sizes: '512x512', type: 'image/png', purpose: 'any' },
+            { src: makeIcon(512, true),  sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+          ]
+        };
+        var link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }));
+        document.head.appendChild(link);
+
+        var fav = document.createElement('link'); fav.rel = 'icon'; fav.href = makeIcon(192, false);
+        var apple = document.createElement('link'); apple.rel = 'apple-touch-icon'; apple.href = makeIcon(180, false);
+        document.head.appendChild(fav); document.head.appendChild(apple);
+      } catch (e) { console.error('Install setup failed', e); }
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -36,7 +84,7 @@
 
     header { text-align: center; line-height: 1.15; }
     .logo-img {
-      width: clamp(68px, 12svh, 100px); height: clamp(68px, 12svh, 100px);
+      width: clamp(78px, 13.5svh, 116px); height: clamp(78px, 13.5svh, 116px);
       border-radius: 50%; object-fit: contain; background: var(--bg); border: 2px solid var(--gold);
       box-shadow: 0 0 0 4px rgba(245,197,66,.12), 0 6px 18px rgba(0,0,0,.45);
     }
@@ -44,7 +92,7 @@
     .arabic { margin: 0; font-size: clamp(1.15rem, 3.7svh, 1.5rem); font-weight: 700; color: var(--gold); }
 
     .spot {
-      margin: clamp(6px,1.2svh,10px) 0; padding: clamp(1px,.4svh,3px) 12px; border-radius: 10px;
+      margin: clamp(6px,1.2svh,10px) 0; padding: clamp(6px,1.3svh,11px) 14px; border-radius: 12px;
       background: var(--card); border: 1px solid var(--line);
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
     }
