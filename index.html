@@ -18,46 +18,64 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Gold Rates">
   <script>
-    // Installable app (Chrome): manifest + icons are generated here, no extra files needed
+    // Installable app (Chrome): manifest + icons are generated here, using the shop logo
     (function () {
-      function makeIcon(size, maskable) {
+      var LOGO = 'https://i.ibb.co/pBK5Zct0/file-00000000e73c7246bafe41f8ba02719e.png?v=icon';
+
+      function makeIcon(size, maskable, img) {
         var c = document.createElement('canvas'); c.width = c.height = size;
-        var x = c.getContext('2d'), m = size / 2, r = size * (maskable ? 0.30 : 0.40);
+        var x = c.getContext('2d'), m = size / 2;
         x.fillStyle = '#050a2b'; x.fillRect(0, 0, size, size);
-        x.beginPath(); x.arc(m, m, r, 0, Math.PI * 2);
-        x.fillStyle = '#f5c542'; x.fill();
-        x.lineWidth = Math.max(2, size / 64); x.strokeStyle = '#ffe08a'; x.stroke();
-        x.fillStyle = '#2a1d00'; x.font = 'bold ' + (r * 1.25) + 'px Arial, sans-serif';
-        x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('S', m, m + size * 0.02);
+        if (img) {
+          var box = size * (maskable ? 0.60 : 0.86), ratio = img.naturalWidth / img.naturalHeight, w = box, h = box;
+          if (ratio > 1) h = box / ratio; else w = box * ratio;
+          x.drawImage(img, m - w / 2, m - h / 2, w, h);
+        } else {
+          var r = size * (maskable ? 0.30 : 0.40);
+          x.beginPath(); x.arc(m, m, r, 0, Math.PI * 2); x.fillStyle = '#f5c542'; x.fill();
+          x.fillStyle = '#2a1d00'; x.font = 'bold ' + (r * 1.25) + 'px Arial, sans-serif';
+          x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('S', m, m + size * 0.02);
+        }
         return c.toDataURL('image/png');
       }
-      try {
-        var base = location.origin + location.pathname;
-        var manifest = {
-          name: 'Sattardina Jewellery - Live Gold Rates',
-          short_name: 'Gold Rates',
-          start_url: base,
-          scope: base.replace(/[^\/]*$/, ''),
-          display: 'fullscreen',
-          display_override: ['fullscreen', 'standalone'],
-          orientation: 'portrait',
-          background_color: '#050a2b',
-          theme_color: '#050a2b',
-          icons: [
-            { src: makeIcon(192, false), sizes: '192x192', type: 'image/png', purpose: 'any' },
-            { src: makeIcon(512, false), sizes: '512x512', type: 'image/png', purpose: 'any' },
-            { src: makeIcon(512, true),  sizes: '512x512', type: 'image/png', purpose: 'maskable' }
-          ]
-        };
-        var link = document.createElement('link');
-        link.rel = 'manifest';
-        link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }));
-        document.head.appendChild(link);
 
-        var fav = document.createElement('link'); fav.rel = 'icon'; fav.href = makeIcon(192, false);
-        var apple = document.createElement('link'); apple.rel = 'apple-touch-icon'; apple.href = makeIcon(180, false);
-        document.head.appendChild(fav); document.head.appendChild(apple);
-      } catch (e) { console.error('Install setup failed', e); }
+      function install(img) {
+        try {
+          var base = location.origin + location.pathname;
+          var manifest = {
+            name: 'Sattardina Jewellery - Live Gold Rates',
+            short_name: 'Gold Rates',
+            start_url: base,
+            scope: base.replace(/[^\\/]*$/, ''),
+            display: 'fullscreen',
+            display_override: ['fullscreen', 'standalone'],
+            orientation: 'portrait',
+            background_color: '#050a2b',
+            theme_color: '#050a2b',
+            icons: [
+              { src: makeIcon(192, false, img), sizes: '192x192', type: 'image/png', purpose: 'any' },
+              { src: makeIcon(512, false, img), sizes: '512x512', type: 'image/png', purpose: 'any' },
+              { src: makeIcon(512, true, img),  sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+            ]
+          };
+          var link = document.createElement('link');
+          link.rel = 'manifest';
+          link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }));
+          document.head.appendChild(link);
+          var fav = document.createElement('link'); fav.rel = 'icon'; fav.href = makeIcon(192, false, img);
+          var apple = document.createElement('link'); apple.rel = 'apple-touch-icon'; apple.href = makeIcon(180, false, img);
+          document.head.appendChild(fav); document.head.appendChild(apple);
+        } catch (e) { console.error('Install setup failed', e); }
+      }
+
+      // Try the shop logo first; if it can't be read, fall back to the "S" icon
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function () {
+        try { makeIcon(16, false, img); install(img); } catch (e) { install(null); }
+      };
+      img.onerror = function () { install(null); };
+      img.src = LOGO;
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
